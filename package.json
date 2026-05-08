@@ -1,0 +1,167 @@
+{
+  "name": "sonarfix-ai",
+  "displayName": "SonarFix AI",
+  "description": "Detect SonarJS code quality issues and fix them with one click using GitHub Copilot",
+  "version": "0.1.0",
+  "publisher": "sonarfix",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Linters",
+    "Other"
+  ],
+  "keywords": [
+    "sonarqube",
+    "sonarjs",
+    "ai",
+    "copilot",
+    "fix",
+    "code quality"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "sonarfix-sidebar",
+          "title": "SonarFix AI",
+          "icon": "resources/sonarfix.svg"
+        }
+      ]
+    },
+    "views": {
+      "sonarfix-sidebar": [
+        {
+          "id": "sonarfix.issuesView",
+          "name": "Issues",
+          "contextualTitle": "SonarFix AI"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "sonarfix.analyzeFile",
+        "title": "Analyse Current File",
+        "category": "SonarFix",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "sonarfix.analyzeAll",
+        "title": "Analyse All Open Files",
+        "category": "SonarFix",
+        "icon": "$(search-refresh)"
+      },
+      {
+        "command": "sonarfix.fixWithAI",
+        "title": "Fix with AI",
+        "category": "SonarFix",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "sonarfix.fixIssueFromTree",
+        "title": "Fix with AI",
+        "category": "SonarFix",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "sonarfix.copilotSignIn",
+        "title": "Sign in with GitHub Copilot",
+        "category": "SonarFix",
+        "icon": "$(github)"
+      },
+      {
+        "command": "sonarfix.copilotSignOut",
+        "title": "Sign out of GitHub Copilot",
+        "category": "SonarFix"
+      },
+      {
+        "command": "sonarfix.copilotStatus",
+        "title": "GitHub Copilot: Check Auth Status",
+        "category": "SonarFix"
+      },
+      {
+        "command": "sonarfix.showOutput",
+        "title": "Show Output Log",
+        "category": "SonarFix",
+        "icon": "$(output)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "sonarfix.analyzeAll",
+          "when": "view == sonarfix.issuesView",
+          "group": "navigation@1"
+        },
+        {
+          "command": "sonarfix.copilotSignIn",
+          "when": "view == sonarfix.issuesView",
+          "group": "navigation@2"
+        },
+        {
+          "command": "sonarfix.showOutput",
+          "when": "view == sonarfix.issuesView",
+          "group": "navigation@3"
+        },
+        {
+          "command": "sonarfix.copilotSignOut",
+          "when": "view == sonarfix.issuesView",
+          "group": "1_auth"
+        },
+        {
+          "command": "sonarfix.copilotStatus",
+          "when": "view == sonarfix.issuesView",
+          "group": "1_auth"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "sonarfix.fixIssueFromTree",
+          "when": "view == sonarfix.issuesView && viewItem == sonarIssue",
+          "group": "inline"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "SonarFix AI",
+      "properties": {
+        "sonarfix.enableOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically analyse files on save"
+        },
+        "sonarfix.copilotModel": {
+          "type": "string",
+          "default": "gpt-4o",
+          "enum": [
+            "gpt-4o",
+            "gpt-4o-mini",
+            "o1-mini"
+          ],
+          "description": "GitHub Copilot model to use for AI fixes"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "typecheck": "tsc --noEmit",
+    "package": "vsce package --no-dependencies"
+  },
+  "dependencies": {
+    "@typescript-eslint/parser": "^8.15.0",
+    "eslint": "^9.15.0",
+    "eslint-plugin-sonarjs": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.0.0",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.7.0"
+  }
+}
